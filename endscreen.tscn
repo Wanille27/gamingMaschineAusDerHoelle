@@ -26,12 +26,11 @@ theme_override_font_sizes/font_size = 86
 text = "Spielende"
 
 [node name="Zeit_Score" type="Label" parent="."]
-visible = false
 top_level = true
-offset_left = 764.0
-offset_top = 159.0
-offset_right = 1534.0
-offset_bottom = 255.0
+offset_left = 610.0
+offset_top = 142.0
+offset_right = 1380.0
+offset_bottom = 238.0
 theme_override_fonts/font = ExtResource("2_dlbub")
 theme_override_font_sizes/font_size = 35
 text = "Zeit/Score:"
@@ -47,7 +46,7 @@ text = "Neustart"
 flat = true
 
 [node name="image" type="Sprite2D" parent="."]
-position = Vector2(579, 325.00012)
+position = Vector2(579, 327.00006)
 scale = Vector2(0.74890137, 0.63183594)
 texture = ExtResource("2_gcvua")
 

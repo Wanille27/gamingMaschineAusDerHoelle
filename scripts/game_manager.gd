@@ -4,13 +4,14 @@ var score = 0
 var timer_started = false
 var manual_time_string := ""
 var use_manual_time := false
+var save_data:SaveData
+
 
 @onready var score_label = $ScoreLabel 
 
 func _ready():
-	if OS.has_feature("dedicated_server"):
-		print("Starting dedicated server...")
-		MultiplayerManager.become_host()
+	save_data = SaveData.load_or_crate()
+
 
 func add_point():
 	score += 1
@@ -25,3 +26,4 @@ func join_as_player_2():
 	print("Join as player 2")
 	%MultiplayerHUD.hide()
 	MultiplayerManager.join_as_player_2()
+	

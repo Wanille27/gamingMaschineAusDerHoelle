@@ -25,6 +25,7 @@ config/icon="uid://cyfxuch6qa87f"
 Music="*res://scenes/music.tscn"
 MultiplayerManager="*res://scripts/multiplayer_manager.gd"
 GameManager="*res://scripts/game_manager.gd"
+HighscoreManager="*res://scenes/Highscore_manager.gd"
 
 [display]
 
@@ -40,6 +41,10 @@ project/assembly_name="First Game"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/split_screen_2d/plugin.cfg")
+
+[global_group]
+
+Player=""
 
 [input]
 

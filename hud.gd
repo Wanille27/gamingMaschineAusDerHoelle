@@ -44,3 +44,7 @@ func set_time_from_string(time_string: String):
 			var seconds = int(sec_parts[0])
 			var milliseconds = int(sec_parts[1])
 			%timecount.text = "Zeit: %02d:%02d.%03d" % [minutes, seconds, milliseconds]
+			
+func game_over():
+	HighscoreManager.add_highscore(coinscollected, time_elapsed)
+	get_tree().change_scene_to_file("res://endscreen.tscn")
