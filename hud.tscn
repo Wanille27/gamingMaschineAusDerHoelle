@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkn80rnknirpp"]
+
+[ext_resource type="Script" uid="uid://cd8p3ayi1j8cs" path="res://hud.gd" id="1_37p78"]
+[ext_resource type="FontFile" uid="uid://yklet7mwbl41" path="res://assets/sprites/PressStart2P-Regular.ttf" id="2_64ctp"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_37p78")
+
+[node name="coincount" type="Label" parent="."]
+offset_right = 106.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_64ctp")
+theme_override_font_sizes/font_size = 22
+text = "Coins:"
+
+[node name="timecount" type="Label" parent="."]
+offset_left = -2.0
+offset_top = 32.0
+offset_right = 111.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_64ctp")
+theme_override_font_sizes/font_size = 22
+text = "Time:"
