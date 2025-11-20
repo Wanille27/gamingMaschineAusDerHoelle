@@ -7,102 +7,179 @@ using System.Threading.Tasks;
 namespace Asteroids;
 
 public partial class Main : Node2D {
+	private bool _running = true;
+	private Thread _runner;
+
+	private ulong _startTimeStampMilliSeconds;
+	
 	private Label _fpsLabel;
 
 	public static ulong Score { get; set; }
 
 	private MeshInstance2D _screen;
-	private PlayerShip _PlayerShip;
+	private PlayerShip _playerShip;
 	private byte _maxNumAsteroids = 5;
+
+	public Asteroid AsteroidMediumTemplate { get; private set; }
+	public Asteroid AsteroidLargeTemplate { get; private set; }
+	public Asteroid AsteroidSmallTemplate { get; private set; }
 	
 	[Signal]
 	public delegate void GameOverEventHandler();
 	
+	
+	public override void _UnhandledInput(InputEvent @event) {
+		if (@event is not InputEventKey eventKey) return;
+		Console.Out.WriteLine($"Event: {OS.GetKeycodeString(eventKey.Keycode)}");
+	}
+	
 	public override void _Ready() {
 		base._Ready();
+
+		Console.Out.WriteLine($"Joypads : {Input.GetConnectedJoypads()}");
 		//DisplayServer.WindowSetSize(new (1920, 1080));
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
-		this._screen = GetNode<MeshInstance2D>("Screen");
+		this._screen = (MeshInstance2D) this.GetChild(2);
 		this._screen._Ready();
-		this._PlayerShip = GetNode<PlayerShip>("PlayerShip/Ship");
-		this._PlayerShip.ShipDestroyed += _on_PlayerShip_ShipDestroyed;
+		//var playerShipScene = GD.Load<PackedScene>("res://PlayerShipSleek1.tscn");
+		//var playerShipSceneI = playerShipScene.Instantiate<Node2D>();
+		this._playerShip = (PlayerShip) this.GetChild(0).GetChild(0);
+		//playerShipSceneI.QueueFree();
+		//this.AddChild(this._PlayerShip);
 		
-		Global.Instance.AsteroidLargeScene = GD.Load<PackedScene>("res://Asteroid_Large.tscn");
-		Global.Instance.AsteroidMediumScene = GD.Load<PackedScene>("res://Asteroid_Medium.tscn");
-		Global.Instance.AsteroidSmallScene = GD.Load<PackedScene>("res://Asteroid_Small.tscn");
+		var asteroidLargeScene = GD.Load<PackedScene>("res://Asteroid_Large.tscn");
+		var asteroidLargeSceneI = asteroidLargeScene.Instantiate<Node2D>();
+		this.AsteroidLargeTemplate = (Asteroid) asteroidLargeSceneI.GetChild(0).Duplicate();
+		asteroidLargeSceneI.QueueFree();
+		
+		var asteroidMediumScene = GD.Load<PackedScene>("res://Asteroid_Medium.tscn");
+		var asteroidMediumSceneI = asteroidMediumScene.Instantiate<Node2D>();
+		this.AsteroidMediumTemplate = (Asteroid) asteroidMediumSceneI.GetChild(0).Duplicate();
+		asteroidMediumSceneI.QueueFree();
+		
+		var asteroidSmallScene = GD.Load<PackedScene>("res://Asteroid_Small.tscn");
+		var asteroidSmallSceneI = asteroidSmallScene.Instantiate<Node2D>();
+		this.AsteroidSmallTemplate = (Asteroid) asteroidSmallSceneI.GetChild(0).Duplicate();
+		asteroidSmallSceneI.QueueFree();
 		
 		foreach (Node child in this.GetChildren()) child._Ready();
 
-		var container = GetNode<VBoxContainer>("VBoxContainer");
+		var container = (VBoxContainer) this.GetChild(1);
 		container.SetSize(DisplayServer.WindowGetSize());
-		this._fpsLabel = container.GetNode<Label>("FPS Label");
+		this._fpsLabel = (Label) container.GetChild(0).GetChild(0);
 		this.GameOver += () => {
-			container.GetNode<CenterContainer>("CenterContainer").GetNode<Label>("Score Label").SetFinalScore("You Lost with score of " + Score);
-			container.GetNode<CenterContainer>("CenterContainer").SetVSizeFlags(Control.SizeFlags.ExpandFill);
+			((ScoreLabel) container.GetChild(1).GetChild(0)).SetToEndState("You Lost with score of " + Score);
+			((CenterContainer) container.GetChild(1)).SetVSizeFlags(Control.SizeFlags.ExpandFill);
+			this._running = false;
 		};
-		        
-		        var global = Global.Instance;
-		        global.ScreenRect = this.GetViewportRect().Size;
 		
-		        for (var i = 0; i < 5; i++) {
-		            this.SpawnNewAsteroid();
-		        }
+		this.Setup();
+		// Start the Async Runner thread.
+		(this._runner = new(this.Run)).Start();
+	}
+
+	~Main() {
+		// End Runner thread on Game end
+		// TODO
+		//new CancellationToken()
+		this._runner.Abort();
+		foreach (Node child in this.GetChildren()) child.QueueFree();
+	}
+	
+
+	public override void _Notification(int what) {
+		//Console.Out.WriteLine($"what: {what}");
+		switch ((long) what) {
+			case NotificationWMCloseRequest: this._running = false; goto default;
+			default: base._Notification(what); break;
+		}
+	}
+
+	private async void Run() {
+		try {
+			var spawnRandomAsteroids = new Task(async void () => {
+				try {
+					var lastSpawnTime = (long) Time.GetTicksMsec();
+					while (this._running) {
+						var spawnRoll = Global.Instance.rng.Randf();
+						var time = (long) Time.GetTicksMsec();
+						// g(x)=log(2,((ta+tb)/(10000))-((amax)/(acur)))
+						double likelyHood = Math.Log2(
+							((double)(time - 10_000 + lastSpawnTime) / lastSpawnTime) * (5 - 0) / 5
+						);
+						
+						//									   ((Asteroid.ActiveAsteroids) / (double)this._maxNumAsteroids));
+						//Console.Out.WriteLine(
+						//	$"g(x)=log2({(double)(Time.GetTicksMsec() + lastSpawnTime) / 10_000} - {(double)Asteroid.ActiveAsteroids / this._maxNumAsteroids})");
+						if (spawnRoll <= likelyHood) {
+							//await Console.Out.WriteLineAsync($"At {time - lastSpawnTime} Likely hood : {likelyHood} roll {spawnRoll}");
+							this.SpawnNewAsteroidAsync();
+							lastSpawnTime = (long) Time.GetTicksMsec();
+							await Task.Delay(3_000);
+						}
+					}
+				} catch (Exception e) {
+					Console.Error.WriteLine(e);
+				}
+			});
+			spawnRandomAsteroids.Start();
+			while (this._running) {
+				await Task.Delay(100);
+			}
+		} catch (Exception e) {
+			Console.Error.WriteLine(e);
+		}
+	}
+
+	private void Setup() {
+		var global = Global.Instance;
+		global.ScreenRect = this.GetViewportRect().Size;
+
+		for (var i = 0; i < 5; i++) this.SpawnNewAsteroid();
+
+		Console.WriteLine($"Initializing PLayer {this._playerShip}");
+		this._playerShip.SetPosition(global.ScreenRect / 2);
 		
-		        Console.WriteLine($"Initializing PLayer {this._PlayerShip}");
-		        this._PlayerShip.SetPosition(global.ScreenRect / 2);
-		
-		        var asteroidSpawnTimer = new Timer();
-		        AddChild(asteroidSpawnTimer);
-		        asteroidSpawnTimer.WaitTime = 1.0f;
-		        asteroidSpawnTimer.Timeout += () => {
-		            if (GetTree().GetNodesInGroup("asteroids").Count < _maxNumAsteroids)
-		            {
-		                SpawnNewAsteroid();
-		            }
-		        };
-		        asteroidSpawnTimer.Start();
-		    }
+	}
+
 	private void SpawnNewAsteroid() {
 		var size = (Asteroid.SizeType) Global.Instance.rng.RandiRange((int) Asteroid.SizeType.Large, (int) Asteroid.SizeType.Small);
-		var asteroidScene = size switch {
-			Asteroid.SizeType.Large => Global.Instance.AsteroidLargeScene,
-			Asteroid.SizeType.Medium => Global.Instance.AsteroidMediumScene,
-			Asteroid.SizeType.Small => Global.Instance.AsteroidSmallScene,
+		Asteroid asteroid = size switch {
+			Asteroid.SizeType.Large => this.AsteroidLargeTemplate.SpawnRandom(),
+			Asteroid.SizeType.Medium => this.AsteroidMediumTemplate.SpawnRandom(),
+			Asteroid.SizeType.Small => this.AsteroidSmallTemplate.SpawnRandom(),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 
-        var asteroid = asteroidScene.Instantiate<Asteroid>();
-        var spawnPosition = new Vector2(Global.Instance.rng.RandiRange(0, (int)Global.Instance.ScreenRect.X), Global.Instance.rng.RandiRange(0, (int)Global.Instance.ScreenRect.Y));
-        asteroid.Position = spawnPosition;
+		Console.WriteLine($"new Asteroid: {asteroid.Position}");
+		this.AddChild(asteroid);
+	}
+	
+	private async void SpawnNewAsteroidAsync() {
+		try {
+			var size = (Asteroid.SizeType) Global.Instance.rng.RandiRange((int) Asteroid.SizeType.Large, (int) Asteroid.SizeType.Small);
+			Asteroid asteroid = size switch {
+				Asteroid.SizeType.Large => this.AsteroidLargeTemplate.SpawnRandom(),
+				Asteroid.SizeType.Medium => this.AsteroidMediumTemplate.SpawnRandom(),
+				Asteroid.SizeType.Small => this.AsteroidSmallTemplate.SpawnRandom(),
+				_ => throw new ArgumentOutOfRangeException()
+			};
 
-		asteroid.Exploded += _on_Asteroid_Exploded;
-						this.AddChild(asteroid);
-					}
-				
-					private void _on_PlayerShip_ShipDestroyed()
-					{
-						EmitSignal(SignalName.GameOver);
-					}
-				
-					private void _on_Asteroid_Exploded(PackedScene newAsteroidScene, int count)
-					{
-						for (int i = 0; i < count; i++)
-						{					var asteroid = newAsteroidScene.Instantiate<Asteroid>();
-					var spawnPosition = new Vector2(Global.Instance.rng.RandiRange(0, (int)Global.Instance.ScreenRect.X), Global.Instance.rng.RandiRange(0, (int)Global.Instance.ScreenRect.Y));
-					asteroid.Position = spawnPosition;
-		
-					asteroid.Exploded += _on_Asteroid_Exploded;
-					this.AddChild(asteroid);
-				}
-			}
-			
-			protected override void Dispose(bool disposing) {		base.Dispose(disposing);
+			await Console.Out.WriteLineAsync($"new Asteroid: {asteroid.Position}");
+			this.CallDeferred(Node.MethodName.AddChild, asteroid);
+		} catch (Exception) {
+			// ignored
+		}
+	}
+
+	protected override void Dispose(bool disposing) {
+		base.Dispose(disposing);
 		if (!disposing) return;
 		//this._PlayerShip?.QueueFree();
-		this._AsteroidLargeTemplate?.QueueFree();
-		this._AsteroidMediumTemplate?.QueueFree();
-		this._AsteroidSmallTemplate?.QueueFree();
+		this.AsteroidLargeTemplate?.Destroy();
+		this.AsteroidMediumTemplate?.Destroy();
+		this.AsteroidSmallTemplate?.Destroy();
 	}
 
 	public static void ScreenWrap(Node2D node) {

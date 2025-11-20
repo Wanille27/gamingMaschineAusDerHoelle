@@ -26,13 +26,10 @@ public partial class Asteroid : RigidBody2D {
 	private CollisionPolygon2D _selfCollisionBody;
 	private Node2D[] _cracks;
 
-	[Signal]
-	public delegate void ExplodedEventHandler(PackedScene newAsteroidScene, int count);
-
 	public enum SizeType {
 		Small = 0,
-		Medium = 1,
-		Large = 2
+		Large = 1,
+		Medium = 2,
 	}
 
 	public Asteroid() {
@@ -41,58 +38,30 @@ public partial class Asteroid : RigidBody2D {
 
 	public override void _Ready() {
 		base._Ready();
-		AddToGroup("asteroids");
-		ActiveAsteroids++;
 
-		_selfLineShape = GetNode<Line2D>("Line2D");
-		_selfCollisionBody = GetNode<CollisionPolygon2D>("CollisionPolygon2D");
+		this._selfLineShape = (Line2D) this.GetChild(0);
+		this._selfCollisionBody = (CollisionPolygon2D) this.GetChild(1);
+		if (this._selfLineShape == null) throw new ("Can't find LineShape");
+		if (this._selfCollisionBody == null) throw new ("Can't find CollisionBody");
+		this._selfLineShape.SetDefaultColor(Global.Instance.LineColor);
+		this._selfLineShape.SetWidth(this._lineWeight);
 
-		_selfLineShape.DefaultColor = Global.Instance.LineColor;
-		_selfLineShape.Width = _lineWeight;
-
-		foreach (Vector2 point in _selfLineShape.Points) {
-			_bodyRect.X = Math.Max(_bodyRect.X, point.X);
-			_bodyRect.Y = Math.Max(_bodyRect.Y, point.Y);
+		foreach (Vector2 point in this._selfLineShape.Points) {
+			this._bodyRect.X = Math.Max(this._bodyRect.X, point.X);
+			this._bodyRect.Y = Math.Max(this._bodyRect.Y, point.Y);
 		}
 
-		_cracks = new Node2D[_selfLineShape.GetChildCount()]; 
-		for (var i = 0; i < _cracks.Length; i++) {
-			_cracks[i] = (Node2D) _selfLineShape.GetChild(i);
-			for (var j = 0; j < _cracks[i].GetChildCount(); j++) {
-				var lineshape = (Line2D) _cracks[i].GetChild(j);
-				lineshape.DefaultColor = Global.Instance.LineColor;
-				lineshape.Width = _lineWeight;
+		this._cracks = new Node2D[this._selfLineShape.GetChildCount()]; 
+		for (var i = 0; i < this._cracks.Length; i++) {
+			this._cracks[i] = (Node2D) this._selfLineShape.GetChild(i);
+			for (var j = 0; j < this._cracks[i].GetChildCount(); j++) {
+				var lineshape = (Line2D) this._cracks[i].GetChild(j);
+				lineshape.SetDefaultColor(Global.Instance.LineColor);
+				lineshape.SetWidth(this._lineWeight);
 			}
 		}
 		
-		_health = _maxHealth;
-
-        var global = Global.Instance;
-        LinearVelocity = new Vector2(global.rng.RandfRange(-1, 1), global.rng.RandfRange(-1, 1)).Normalized() 
-                          * global.AsteroidGlobalLinearSpeedMin 
-                          * _sizeType switch
-                          {
-                              SizeType.Large => global.AsteroidLargeSpeedMultiplier,
-                              SizeType.Medium => global.AsteroidMediumSpeedMultiplier,
-                              SizeType.Small => global.AsteroidSmallSpeedMultiplier,
-                              _ => 1f
-                          };
-
-        Scale = Vector2.One * _sizeType switch
-        {
-            SizeType.Large => global.AsteroidLargeScaleMultiplier,
-            SizeType.Medium => global.AsteroidMediumScaleMultiplier,
-            SizeType.Small => global.AsteroidSmallScaleMultiplier,
-            _ => 1f
-        };
-        
-        Mass = _sizeType switch
-        {
-            SizeType.Large => 100_000_000,
-            SizeType.Medium => 500_000,
-            SizeType.Small => 5_000,
-            _ => 5000
-        };
+		this._health = this._maxHealth;
 	}
 
 	private void OnScreenExit() {
@@ -128,6 +97,100 @@ public partial class Asteroid : RigidBody2D {
 	//	//this.Position = spawnVector.MapToScreenCoordinates();
 	//}
 
+	private new void SetScale(Vector2 scale) {
+		this._selfCollisionBody.Scale = (scale);
+		this._selfLineShape.Scale = (scale);
+	}
+	
+	[Pure]
+	public Asteroid SpawnRandom() {
+		var global = Global.Instance;
+		var asteroid = (Asteroid) this.Duplicate();
+		
+		asteroid._Ready();
+		ActiveAsteroids++;
+		
+		
+		// get random Position within Global.ScreenRect
+		//asteroid.Position = new SpawnVector(
+		//	angle: global.rng.RandfRange(0, 1),
+		//	distance: global.rng.RandfRange(0, 1)
+		//).MapToScreenCoordinates();
+		asteroid.Position = new SpawnVector(
+			global.rng.RandfRange(0, float.Tau),
+			global.ScreenRect.Length() / 2 + asteroid._bodyRect.Length()
+		).MapToScreenCoordinates();
+
+		Vector2[] screenEdges = [new (0, global.ScreenRect.Y), new (global.ScreenRect.X, 0), new (global.ScreenRect.X, global.ScreenRect.Y), new (0, 0)];
+		var farthest1 = 0;
+		for (var i = 1; i < screenEdges.Length; i++) {
+			if (asteroid.Position.DistanceTo(screenEdges[farthest1]) <= asteroid.Position.DistanceTo(screenEdges[i])) {
+				farthest1 = i;
+			}
+		}
+		Vector2 randomEdgePoint = screenEdges[farthest1] * global.rng.RandfRange(0, 1);
+		asteroid.LinearVelocity = (randomEdgePoint - asteroid.Position).Normalized()
+								  * global.AsteroidGlobalLinearSpeedMin
+								  * asteroid._sizeType switch {
+									  SizeType.Large => global.AsteroidLargeSpeedMultiplier,
+									  SizeType.Medium => global.AsteroidMediumSpeedMultiplier,
+									  SizeType.Small => global.AsteroidSmallSpeedMultiplier,
+								  };
+		
+		asteroid.SetScale(Vector2.One * asteroid._sizeType switch {
+			SizeType.Large => global.AsteroidLargeScaleMultiplier,
+			SizeType.Medium => global.AsteroidMediumScaleMultiplier,
+			SizeType.Small => global.AsteroidSmallScaleMultiplier,
+		});
+		
+		asteroid.Mass = asteroid._sizeType switch {
+			SizeType.Large  => 100_000_000,
+			SizeType.Medium => 500_000,
+			SizeType.Small  => 5_000,
+		};
+
+
+		Console.WriteLine($"Screen center: {global.ScreenRect / 2}");
+		Console.WriteLine($"Asteroid pos: {asteroid.Position}");
+		Console.WriteLine($"Asteroid vel: {asteroid.LinearVelocity}");
+		
+		//asteroid.RotationSpeed = global.rng.RandfRange(-Global.AsteroidAngularSpeed, Global.AsteroidAngularSpeed);
+		//asteroid.LinearVelocity = new (
+		//	x: global.rng.RandfRange(-Global.AsteroidLinearSpeed, Global.AsteroidLinearSpeed),
+		//	y: global.rng.RandfRange(-Global.AsteroidLinearSpeed, Global.AsteroidLinearSpeed)
+		//);
+		//asteroid.AngularVelocity =
+		//	global.rng.RandfRange(-Global.AsteroidAngularSpeed, Global.AsteroidAngularSpeed);
+
+		return asteroid;
+	}
+	
+	public struct SpawnVector {
+		public float AngleRadians { get; set; } = 0;
+		public float Lenght { get; set; } = 0; // 0 - 1
+		
+		[Pure]
+		public Vector2 MapToScreenCoordinates() {
+			//var angleV = (float) (this.angle * Math.Tau);
+			return new (
+				(Global.Instance.ScreenRect.X / 2) + (float) Math.Cos(this.AngleRadians) * this.Lenght,
+				(Global.Instance.ScreenRect.Y / 2) + (float) Math.Sin(this.AngleRadians) * this.Lenght
+			);
+		}
+		
+		public SpawnVector() {}
+
+		public SpawnVector(float angleRadians, float distance) {
+			this.AngleRadians = angleRadians;
+			this.Lenght = distance;
+		}
+		
+		public SpawnVector(Vector2 origin, Vector2 direction) {
+			this.AngleRadians = direction.AngleToPoint(origin);
+			this.Lenght = direction.Length();
+		}
+	}
+
 	private void ActionOnCollision(Node target) {
 		if (target is RigidBody2D body) {
 			int multiplier = body is Asteroid asteroid? (int) asteroid._sizeType : 0;
@@ -137,33 +200,69 @@ public partial class Asteroid : RigidBody2D {
 		this._health--;
 		if (this._health == 0) {
 			Main.Score += this._scorePerKill;
+			// TODO
 			this.DestructAndSpawnChildren();
 			return;
 		}
 
+		Console.Out.WriteLine($":: max: {this._maxHealth} ; cur: {this._health} ::");
 		this._cracks[this._maxHealth - this._health - 1].SetVisible(true);
 	}
 
 	private void DestructAndSpawnChildren()
 	{
-		PackedScene newAsteroidScene = _sizeType switch
+		var main = this.GetParent<Main>();
+		if (main is null)
 		{
-			SizeType.Large => Global.Instance.AsteroidMediumScene,
-			SizeType.Medium => Global.Instance.AsteroidSmallScene,
-			_ => null
-		};
-
-		if (newAsteroidScene != null)
-		{
-			EmitSignal(SignalName.Exploded, newAsteroidScene, 2);
+			this.Destroy();
+			return;
 		}
 
-		Destroy();
+		Asteroid[] newAsteroids;
+		switch (this._sizeType)
+		{
+			case SizeType.Large:
+				newAsteroids = [
+					(Asteroid) main.AsteroidMediumTemplate.Duplicate()
+				];
+				newAsteroids[0].SetScale(new(0.1f, 0.1f));
+				break;
+			case SizeType.Medium:
+				newAsteroids = [
+					(Asteroid) main.AsteroidSmallTemplate.Duplicate()
+				];
+				break;
+			case SizeType.Small:
+			default:
+				this.Destroy();
+				main.RemoveChild(this);
+				//this.Destroy();
+				return;
+		}
+
+		foreach (Asteroid asteroid in newAsteroids) {
+			main.AddChild(this.CreateSplitAsteroid(asteroid));
+		}
+
+		this.Destroy();
+		main.RemoveChild(this);
 	}
 	
+	private Asteroid CreateSplitAsteroid(in Asteroid asteroid) {
+		asteroid.Position = this.Position;
+		
+		Vector2 newDirection = this.LinearVelocity.Rotated((float)GD.RandRange(-Math.PI / 4, Math.PI / 4));
+		asteroid.LinearVelocity = newDirection;
+
+		return asteroid;
+	}
+	
+	//~Asteroid() => this.Destroy();
 	public override void _ExitTree() => this.Destroy();
+	
 	public void Destroy() {
-		ActiveAsteroids--;
-		QueueFree();
+		Console.Out.WriteLine($"Delete {this.GetClass().GetBaseName()}#{this.GetInstanceId()}");
+		//foreach (Node child in this.GetChildren()) child.QueueFree();
+		this.QueueFree();
 	}
 }

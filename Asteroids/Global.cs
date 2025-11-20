@@ -4,9 +4,9 @@ namespace Asteroids;
 
 public partial class Global : Node {
 	public static Global Instance { get; private set; }
+	static Global() => Instance = new ();
 
 	public override void _Ready() {
-		Instance = this;
 		this.rng.Randomize();
 	}
 	
@@ -33,7 +33,9 @@ public partial class Global : Node {
 	[Export] public float LineWeight					= 2;
 	[Export] public Vector2 ScreenRect					= Vector2.Zero;
 
-	public PackedScene AsteroidLargeScene;
-	public PackedScene AsteroidMediumScene;
-	public PackedScene AsteroidSmallScene;
+	public const string Joystick0Left = "Joystick0Left";
+	public const string Joystick0Right = "Joystick0Right";
+	public const string Joystick0Down = "Joystick0Down";
+	public const string Joystick0Up = "Joystick0Up";
+
 }
