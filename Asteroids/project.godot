@@ -11,10 +11,25 @@ config_version=5
 [application]
 
 config/name="Asteroids"
-run/main_scene="uid://bbr3fvvj6ux2v"
-config/features=PackedStringArray("4.4", "Forward Plus")
+run/main_scene="uid://bw7jxombfbkmg"
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://Global.cs"
+
+[display]
+
+window/size/mode=3
 
 [dotnet]
 
 project/assembly_name="Asteroids"
+
+[physics]
+
+2d/default_gravity=0.0
+2d/default_gravity_vector=Vector2(0, 0)
+2d/default_linear_damp=0.0
+2d/default_angular_damp=0.0
