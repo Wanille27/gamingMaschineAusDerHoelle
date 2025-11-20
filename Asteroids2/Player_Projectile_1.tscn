@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://bf2gb4sqfvca1"]
+
+[ext_resource type="Script" uid="uid://cvagtbjvo0o3u" path="res://PlayerProjectile.cs" id="1_q0s25"]
+
+[node name="root" type="Node2D"]
+
+[node name="PlayerProjectile" type="RigidBody2D" parent="."]
+mass = 0.4
+contact_monitor = true
+max_contacts_reported = 1
+angular_velocity = 6.28319
+script = ExtResource("1_q0s25")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlayerProjectile"]
+polygon = PackedVector2Array(8, 0, 8, 0, 0, -8, -8, 0, 0, 8)
+
+[node name="LineShape" type="Line2D" parent="PlayerProjectile"]
+points = PackedVector2Array(-8, 0, 0, -8, 8, 0, 0, 8)
+closed = true
+width = 2.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="PlayerProjectile"]
+position = Vector2(0, -7.62938e-07)
+scale = Vector2(0.8, 0.8)

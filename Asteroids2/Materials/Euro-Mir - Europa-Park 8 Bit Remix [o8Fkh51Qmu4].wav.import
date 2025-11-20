@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b4xufc6cim7c5"
+path="res://.godot/imported/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav-259617dee8ab7849af937bba17e27188.sample"
+
+[deps]
+
+source_file="res://Materials/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav"
+dest_files=["res://.godot/imported/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav-259617dee8ab7849af937bba17e27188.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
