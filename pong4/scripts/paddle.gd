@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 	velocity = clamp(velocity, -max_velocity, max_velocity)
 	
 	global_position.y += velocity
-	global_position.y = clampf(global_position.y, 0, get_window().size.y)
+	global_position.y = clampf(global_position.y, 0, get_window().size.y +300)
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Ball:
