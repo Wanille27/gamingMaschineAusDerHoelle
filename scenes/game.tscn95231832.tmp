@@ -309,7 +309,7 @@ position = Vector2(77, 139)
 script = ExtResource("10_ca42v")
 
 [node name="Finishshape" type="CollisionShape2D" parent="Finishline"]
-position = Vector2(3488, -379)
+position = Vector2(17, -197)
 shape = SubResource("RectangleShape2D_ca42v")
 
 [node name="Coins" type="Node" parent="."]
