@@ -3,6 +3,7 @@ extends Node2D
 @onready var ball = $Ball
 @onready var paddle_one = $PaddleOne
 @onready var paddle_two = $PaddleTwo
+@onready var explosion = $Explosion
 
 @onready var detector_left = $DetectorLeft
 @onready var detector_right = $DetectorRight
@@ -59,11 +60,11 @@ func reset_round():
 	
 
 func _on_detectore_ball_out(is_left):
+	explosion.play()
 	if is_left:
 		score.y += 1
 	else:
 		score.x += 1
-	print(score)
 	hud.set_new_score(score)
 	
 	if score.x >= final_score || score.y >= final_score:
