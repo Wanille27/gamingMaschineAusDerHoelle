@@ -30,6 +30,10 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="Pong4"
 
+[gui]
+
+theme/custom_font="uid://bd3fe6aweevja"
+
 [input]
 
 ui_left={

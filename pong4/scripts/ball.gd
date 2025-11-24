@@ -2,6 +2,8 @@ extends CharacterBody2D
 class_name Ball
 
 @export var speed_increase_per_bounce = 20
+@onready var bleep = $bleep
+@onready var plob = $plop
 
 var debug_mode = false
 var active = false
@@ -27,6 +29,7 @@ func _physics_process(delta: float) -> void:
 	
 	if colided:
 		move_dir = move_dir.bounce(get_last_slide_collision().get_normal())
+		plob.play()
 
 func reset(reset_pos):
 	global_position = reset_pos
@@ -43,4 +46,6 @@ func bounce_from_paddle(paddle_y_pos, paddle_height):
 	move_dir.x *= -1
 	
 	speed += speed_increase_per_bounce
+	
+	bleep.play()
 	
