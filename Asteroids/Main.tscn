@@ -1,0 +1,82 @@
+[gd_scene load_steps=15 format=3 uid="uid://bw7jxombfbkmg"]
+
+[ext_resource type="Script" uid="uid://c0fxflyg86ee6" path="res://Main.cs" id="1_glv2v"]
+[ext_resource type="PackedScene" uid="uid://dgcyap0jkxmrb" path="res://PlayerShipSleek1.tscn" id="2_uu6xs"]
+[ext_resource type="Material" uid="uid://dmfe7ras5b3" path="res://Materials/ScreenMaterial.tres" id="3_lgr22"]
+[ext_resource type="Script" uid="uid://b4qngcyl7g67b" path="res://FpsLabel.cs" id="3_r0du0"]
+[ext_resource type="Script" uid="uid://ca1eln7caa0kc" path="res://ScoreLabel.cs" id="4_cm0pq"]
+[ext_resource type="Shader" uid="uid://cyo6fgfwrgjbw" path="res://Screen.gdshader" id="5_3dxm6"]
+[ext_resource type="Script" uid="uid://ciyilea7v7bq0" path="res://Screen.cs" id="5_fos0i"]
+[ext_resource type="AudioStream" uid="uid://b4xufc6cim7c5" path="res://Materials/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav" id="8_03owx"]
+[ext_resource type="Script" uid="uid://csnh4wnmotw4r" path="res://GameMusicPlayer2d.cs" id="8_trn2v"]
+[ext_resource type="Script" uid="uid://bt2hme41wrfti" path="res://RocketEngineStreamPlayer2d.cs" id="8_wkp8b"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uu6xs"]
+font_size = 36
+
+[sub_resource type="LabelSettings" id="LabelSettings_r0du0"]
+font_size = 62
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3dxm6"]
+shader = ExtResource("5_3dxm6")
+shader_parameter/curvature = 0.0
+shader_parameter/skip = 0.0
+shader_parameter/image_flicker = 0.0
+shader_parameter/vignette_flicker_speed = 0.75
+shader_parameter/vignette_strength = 0.5
+shader_parameter/small_scanlines_speed = 0.8
+shader_parameter/small_scanlines_proximity = 1.0
+shader_parameter/small_scanlines_opacity = 1.0
+shader_parameter/scanlines_opacity = 0.0
+shader_parameter/scanlines_speed = 1.0
+shader_parameter/scanline_thickness = 0.5
+shader_parameter/scanlines_spacing = 1.0
+shader_parameter/noise_strength = 0.4
+
+[sub_resource type="QuadMesh" id="QuadMesh_3dxm6"]
+
+[node name="root" type="Node2D"]
+script = ExtResource("1_glv2v")
+
+[node name="root" parent="." instance=ExtResource("2_uu6xs")]
+top_level = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+material = ExtResource("3_lgr22")
+offset_right = 41.0
+offset_bottom = 140.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FPS Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "69"
+label_settings = SubResource("LabelSettings_uu6xs")
+script = ExtResource("3_r0du0")
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Score Label" type="Label" parent="VBoxContainer/CenterContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_r0du0")
+script = ExtResource("4_cm0pq")
+
+[node name="Screen" type="MeshInstance2D" parent="."]
+top_level = true
+texture_repeat = 3
+material = SubResource("ShaderMaterial_3dxm6")
+scale = Vector2(1020, 1020)
+mesh = SubResource("QuadMesh_3dxm6")
+script = ExtResource("5_fos0i")
+
+[node name="RocketEngineStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("8_wkp8b")
+
+[node name="GameMusicPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_03owx")
+volume_db = -10.0
+autoplay = true
+script = ExtResource("8_trn2v")
+
+[connection signal="finished" from="GameMusicPlayer2D" to="GameMusicPlayer2D" method="_on_finished"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://drw7g334urq5"]
+[gd_scene load_steps=9 format=3 uid="uid://drw7g334urq5"]
 
 [ext_resource type="Script" uid="uid://cfbjxfwxiv0e2" path="res://scripts/game.gd" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://boyxbvbpun32g" path="res://scenes/paddle.tscn" id="2_yqjtg"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bgbxy227ckqj6" path="res://scenes/wall.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://xa4fxw1hapst" path="res://scenes/detector.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://dl47486gxy70h" path="res://scenes/hud.tscn" id="6_p57ef"]
+[ext_resource type="AudioStream" uid="uid://bjskr5kd7670b" path="res://assets/8-bit-explosion-3-340456.mp3" id="7_u5sy4"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_8cj0n"]
 
@@ -50,3 +51,6 @@ is_left = true
 position = Vector2(1290, 360)
 
 [node name="StartDelay" type="Timer" parent="."]
+
+[node name="Explosion" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_u5sy4")
