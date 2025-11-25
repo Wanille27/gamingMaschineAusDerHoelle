@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://pxiylxmve6j"
-path="res://.godot/imported/PressStart2P-Regular.ttf-c62b30989dd3295aabbfd8887ec05b00.fontdata"
+path="res://.godot/imported/PressStart2P-Regular.ttf-1cc74ac055b227bc8f9059bdb0b5e2d1.fontdata"
 
 [deps]
 
-source_file="res://Materials/PressStart2P-Regular.ttf"
-dest_files=["res://.godot/imported/PressStart2P-Regular.ttf-c62b30989dd3295aabbfd8887ec05b00.fontdata"]
+source_file="res://gamingMaschineAusDerHoelle/Asteroids/Materials/PressStart2P-Regular.ttf"
+dest_files=["res://.godot/imported/PressStart2P-Regular.ttf-1cc74ac055b227bc8f9059bdb0b5e2d1.fontdata"]
 
 [params]
 
@@ -21,6 +21,7 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
 subpixel_positioning=4
 keep_rounding_remainders=true
