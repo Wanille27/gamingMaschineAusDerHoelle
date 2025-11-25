@@ -71,7 +71,7 @@ public partial class Asteroid : RigidBody2D {
 
 	public override void _PhysicsProcess(double delta) {
 		base._PhysicsProcess(delta);
-		Main.ScreenWrap(this);
+		Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids.ScreenWrap(this);
 	}
 
 	//public override void _PhysicsProcess(double delta) {
@@ -199,7 +199,7 @@ public partial class Asteroid : RigidBody2D {
 		if (target is not PlayerProjectile) return;
 		this._health--;
 		if (this._health == 0) {
-			Main.Score += this._scorePerKill;
+			Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids.Score += this._scorePerKill;
 			// TODO
 			this.DestructAndSpawnChildren();
 			return;
@@ -211,7 +211,7 @@ public partial class Asteroid : RigidBody2D {
 
 	private void DestructAndSpawnChildren()
 	{
-		var main = this.GetParent<Main>();
+		var main = this.GetParent<Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids>();
 		if (main is null)
 		{
 			this.Destroy();

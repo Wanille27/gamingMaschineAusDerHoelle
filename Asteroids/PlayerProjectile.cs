@@ -40,7 +40,7 @@ public partial class PlayerProjectile : RigidBody2D
 
 	public override void _PhysicsProcess(double delta) {
 		base._PhysicsProcess(delta);
-		Main.ScreenWrap(this);
+		Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids.ScreenWrap(this);
 	}
 
 	private void Destroy(Node? hitTarget) {
