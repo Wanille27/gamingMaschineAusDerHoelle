@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgcyap0jkxmrb"]
+
+[ext_resource type="Script" uid="uid://c641rw7ctucxp" path="res://PlayerShip.cs" id="1_4cgdy"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4cgdy"]
+
+[node name="root" type="Node2D"]
+
+[node name="Ship" type="RigidBody2D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_4cgdy")
+center_of_mass_mode = 1
+contact_monitor = true
+max_contacts_reported = 1
+linear_damp = 0.1
+angular_damp = 0.5
+script = ExtResource("1_4cgdy")
+SpeedMultiplier = 1.0
+FireBurstDelay = 1.0
+FireBurstCount = 1.0
+_shipEngineFireColor = Color(0.494118, 0.635294, 0.968627, 0.588235)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ship"]
+polygon = PackedVector2Array(-48, 0, 0, -16, 24, -8, 8, 0, 24, 8, 0, 16)
+
+[node name="LineShape" type="Line2D" parent="Ship"]
+position = Vector2(117, 0)
+points = PackedVector2Array(-165, 0, -117, -16, -93, -8, -109, 0, -93, 8, -117, 16)
+closed = true
+width = 2.0
+
+[node name="Front" type="Marker2D" parent="Ship"]
+position = Vector2(-48, 0)
+
+[node name="Center" type="Marker2D" parent="Ship"]
+
+[node name="LineFireShape" type="Line2D" parent="Ship"]
+points = PackedVector2Array(32, -8, 72, 0, 32, 8, 40, 0)
+closed = true
+width = 2.0
+
+[node name="LineBackwardsFireShapeLeft" type="Line2D" parent="Ship"]
+position = Vector2(8, 0)
+points = PackedVector2Array(-40, 8, -40, 16, -56, 24, -48, 8)
+closed = true
+width = 2.0
+
+[node name="LineBackwardsFireShapeRight" type="Line2D" parent="Ship"]
+position = Vector2(8, 8)
+points = PackedVector2Array(-40, -16, -48, -16, -56, -32, -40, -24)
+closed = true
+width = 2.0
+
+[node name="LineSideWardsRight" type="Line2D" parent="Ship"]
+points = PackedVector2Array(8, -16, 8, -24, 24, -32, 16, -16)
+closed = true
+width = 2.0
+
+[node name="LineSideWardsLeft" type="Line2D" parent="Ship"]
+points = PackedVector2Array(8, 16, 8, 24, 24, 32, 16, 16)
+closed = true
+width = 2.0
