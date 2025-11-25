@@ -29,7 +29,7 @@ theme_override_fonts/font = ExtResource("2_dlbub")
 theme_override_font_sizes/font_size = 86
 text = "Game Over"
 
-[node name="Button" type="Button" parent="."]
+[node name="UI" type="Button" parent="."]
 top_level = true
 offset_left = 368.0
 offset_top = 473.0
@@ -37,7 +37,7 @@ offset_right = 753.0
 offset_bottom = 705.0
 theme_override_fonts/font = ExtResource("2_dlbub")
 theme_override_font_sizes/font_size = 67
-text = "Neustart"
+text = "Back to UI"
 flat = true
 
 [node name="image" type="Sprite2D" parent="."]
@@ -68,4 +68,4 @@ theme_override_fonts/font = ExtResource("2_dlbub")
 theme_override_font_sizes/font_size = 22
 text = "Time:"
 
-[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="button_down" from="UI" to="." method="_on_button_button_down"]
