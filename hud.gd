@@ -46,5 +46,10 @@ func set_time_from_string(time_string: String):
 			%timecount.text = "Zeit: %02d:%02d.%03d" % [minutes, seconds, milliseconds]
 			
 func game_over():
-	HighscoreManager.add_highscore(coinscollected, time_elapsed)
+	var endscreen_scene = load("res://endscreen.tscn").instantiate()
+	endscreen_scene.coinscollected = coinscollected
+	endscreen_scene.time_elapsed = time_elapsed	
+	# Alte Szene entfernen und neue hinzufügen
+	get_tree().root.add_child(endscreen_scene)
+	get_tree().current_scene.queue_free()
 	get_tree().change_scene_to_file("res://endscreen.tscn")
