@@ -204,7 +204,7 @@ public partial class PlayerShip : RigidBody2D {
 		}
 		this._currentBurstDelay -= (float) delta;
 		
-		Main.ScreenWrap(this);
+		AsteroidsMain.ScreenWrap(this);
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -310,10 +310,10 @@ public partial class PlayerShip : RigidBody2D {
 		if (this._health != 0) return;
 		this.ResetVfx();
 		this._alive = false;
-		var main = (Main) this.GetParent().GetParent();
+		var main = (AsteroidsMain) this.GetParent().GetParent();
 		this._steerDirection.angularDirection = SteerDirection.AngularDirection.NONE;
 		this._steerDirection.linearDirection = SteerDirection.LinearDirection.NONE;
-		main.EmitSignal(Main.SignalName.GameOver);
+		main.EmitSignal(AsteroidsMain.SignalName.GameOver);
 	}
 
 	public void PlayEngineVfx() {

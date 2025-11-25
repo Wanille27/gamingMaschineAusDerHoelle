@@ -1,15 +1,19 @@
-[gd_scene load_steps=15 format=3 uid="uid://bw7jxombfbkmg"]
+[gd_scene load_steps=17 format=3 uid="uid://bw7jxombfbkmg"]
 
 [ext_resource type="Script" uid="uid://c0fxflyg86ee6" path="res://Main.cs" id="1_glv2v"]
 [ext_resource type="PackedScene" uid="uid://dgcyap0jkxmrb" path="res://PlayerShipSleek1.tscn" id="2_uu6xs"]
 [ext_resource type="Material" uid="uid://dmfe7ras5b3" path="res://Materials/ScreenMaterial.tres" id="3_lgr22"]
 [ext_resource type="Script" uid="uid://b4qngcyl7g67b" path="res://FpsLabel.cs" id="3_r0du0"]
+[ext_resource type="FontFile" uid="uid://pxiylxmve6j" path="res://Materials/PressStart2P-Regular.ttf" id="4_20pc6"]
 [ext_resource type="Script" uid="uid://ca1eln7caa0kc" path="res://ScoreLabel.cs" id="4_cm0pq"]
 [ext_resource type="Shader" uid="uid://cyo6fgfwrgjbw" path="res://Screen.gdshader" id="5_3dxm6"]
 [ext_resource type="Script" uid="uid://ciyilea7v7bq0" path="res://Screen.cs" id="5_fos0i"]
 [ext_resource type="AudioStream" uid="uid://b4xufc6cim7c5" path="res://Materials/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav" id="8_03owx"]
 [ext_resource type="Script" uid="uid://csnh4wnmotw4r" path="res://GameMusicPlayer2d.cs" id="8_trn2v"]
 [ext_resource type="Script" uid="uid://bt2hme41wrfti" path="res://RocketEngineStreamPlayer2d.cs" id="8_wkp8b"]
+
+[sub_resource type="Theme" id="Theme_5vvyt"]
+default_font = ExtResource("4_20pc6")
 
 [sub_resource type="LabelSettings" id="LabelSettings_uu6xs"]
 font_size = 36
@@ -47,6 +51,7 @@ offset_right = 41.0
 offset_bottom = 140.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = SubResource("Theme_5vvyt")
 
 [node name="FPS Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
