@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://cl3s4jio7ldy"]
+
+[ext_resource type="Script" uid="uid://411xr3lbyb6n" path="res://endscreen.gd" id="1_sug1e"]
+[ext_resource type="FontFile" uid="uid://yklet7mwbl41" path="res://assets/sprites/PressStart2P-Regular.ttf" id="2_dlbub"]
+[ext_resource type="Texture2D" uid="uid://c3cth0jnxkkcw" path="res://assets/sprites/player.png" id="2_gcvua"]
+
+[sub_resource type="GDScript" id="GDScript_dlbub"]
+script/source = "extends Label
+"
+
+[node name="Endscreen" type="Node2D"]
+script = ExtResource("1_sug1e")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_left = -1.0
+offset_top = 1.0
+offset_right = 1156.0
+offset_bottom = 653.0
+color = Color(0.08235294, 0.5176471, 1, 1)
+
+[node name="Spielende" type="Label" parent="."]
+top_level = true
+offset_left = 191.0
+offset_top = 14.0
+offset_right = 1008.0
+offset_bottom = 301.0
+theme_override_fonts/font = ExtResource("2_dlbub")
+theme_override_font_sizes/font_size = 86
+text = "Game Over"
+
+[node name="UI" type="Button" parent="."]
+top_level = true
+offset_left = 368.0
+offset_top = 473.0
+offset_right = 753.0
+offset_bottom = 705.0
+theme_override_fonts/font = ExtResource("2_dlbub")
+theme_override_font_sizes/font_size = 67
+text = "Back to UI"
+flat = true
+
+[node name="image" type="Sprite2D" parent="."]
+position = Vector2(579, 327.00006)
+scale = Vector2(0.74890137, 0.63183594)
+texture = ExtResource("2_gcvua")
+
+[node name="Zeit_Scoccre" type="Label" parent="."]
+visible = false
+top_level = true
+offset_left = 610.0
+offset_top = 142.0
+offset_right = 1380.0
+offset_bottom = 238.0
+theme_override_fonts/font = ExtResource("2_dlbub")
+theme_override_font_sizes/font_size = 35
+text = "Zeit/Score:"
+script = SubResource("GDScript_dlbub")
+
+[node name="Zeit_Score" type="Label" parent="."]
+visible = false
+offset_left = -2.0
+offset_top = 32.0
+offset_right = 111.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_dlbub")
+theme_override_font_sizes/font_size = 22
+text = "Time:"
+
+[connection signal="button_down" from="UI" to="." method="_on_button_button_down"]

@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://8meffobckh2"]
+
+[ext_resource type="Texture2D" uid="uid://c3cth0jnxkkcw" path="res://assets/sprites/player.png" id="1_8hh42"]
+[ext_resource type="Script" uid="uid://bqfvutl1ho65a" path="res://startscreen.gd" id="1_nrfbx"]
+[ext_resource type="FontFile" uid="uid://yklet7mwbl41" path="res://assets/sprites/PressStart2P-Regular.ttf" id="3_1yvcn"]
+
+[node name="Startscreen" type="Node2D"]
+script = ExtResource("1_nrfbx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_left = 1.0
+offset_right = 1148.0
+offset_bottom = 650.0
+color = Color(0, 0.654902, 1, 1)
+
+[node name="spielname" type="Label" parent="."]
+top_level = true
+offset_left = 128.0
+offset_top = 20.0
+offset_right = 998.0
+offset_bottom = 129.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_1yvcn")
+theme_override_font_sizes/font_size = 87
+text = "Bit Knight"
+
+[node name="anleitung" type="Label" parent="."]
+visible = false
+offset_left = 831.0
+offset_top = 105.0
+offset_right = 1494.0
+offset_bottom = 696.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "Anleitung:
+Welches Team 
+am schnellsten 
+alle Münzen 
+sammelt und 
+am Ziel ist
+hat gewonnen 
+
+"
+
+[node name="image" type="Sprite2D" parent="."]
+position = Vector2(577, 325.00003)
+scale = Vector2(0.74890137, 0.63183594)
+texture = ExtResource("1_8hh42")
+
+[node name="start" type="Button" parent="."]
+offset_left = 302.0
+offset_top = 520.0
+offset_right = 836.0
+offset_bottom = 680.0
+theme_override_fonts/font = ExtResource("3_1yvcn")
+theme_override_font_sizes/font_size = 76
+text = "Start"
+flat = true
+
+[connection signal="button_down" from="start" to="." method="_on_start_button_down"]
