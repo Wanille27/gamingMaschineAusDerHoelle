@@ -1,10 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://dqksr1c02weh5"]
+[gd_scene load_steps=22 format=3 uid="uid://dqksr1c02weh5"]
 
 [ext_resource type="FontFile" uid="uid://b3ptw5hc6t6iv" path="res://PressStart2P-Regular.ttf" id="1_3vsgj"]
 [ext_resource type="Script" uid="uid://ci3tbd1ygy81v" path="res://MenuPanel.cs" id="1_4awgr"]
+[ext_resource type="PackedScene" uid="uid://bw7jxombfbkmg" path="res://gamingMaschineAusDerHoelle/Asteroids/Main.tscn" id="1_jd16n"]
 [ext_resource type="Script" uid="uid://bnkhf1bt0fjbk" path="res://GameControl.cs" id="2_jt8kg"]
 [ext_resource type="Script" uid="uid://c1vwxmdck6ejg" path="res://SelectionLabel.cs" id="3_jt8kg"]
 [ext_resource type="Script" uid="uid://c4cnti3wgh32u" path="res://ButtonContainer.cs" id="4_6je8t"]
+[ext_resource type="Shader" uid="uid://cyo6fgfwrgjbw" path="res://gamingMaschineAusDerHoelle/Asteroids/Screen.gdshader" id="7_sqqfm"]
+[ext_resource type="Script" uid="uid://ciyilea7v7bq0" path="res://gamingMaschineAusDerHoelle/Asteroids/Screen.cs" id="8_hqngs"]
 
 [sub_resource type="Theme" id="Theme_tdex8"]
 
@@ -42,18 +45,29 @@ HBoxContainer/constants/separation = 20
 [sub_resource type="Shortcut" id="Shortcut_4awgr"]
 resource_local_to_scene = true
 
-[node name="Control" type="Control"]
-layout_mode = 3
-anchor_right = 1.718
-anchor_bottom = 1.667
-offset_right = -59.1361
-offset_bottom = -0.216064
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbivr"]
+shader = ExtResource("7_sqqfm")
+shader_parameter/curvature = 0.0
+shader_parameter/skip = 0.0
+shader_parameter/image_flicker = 0.0
+shader_parameter/vignette_flicker_speed = 0.75
+shader_parameter/vignette_strength = 0.5
+shader_parameter/small_scanlines_speed = 0.8
+shader_parameter/small_scanlines_proximity = 1.0
+shader_parameter/small_scanlines_opacity = 1.0
+shader_parameter/scanlines_opacity = 0.0
+shader_parameter/scanlines_speed = 1.0
+shader_parameter/scanline_thickness = 0.5
+shader_parameter/scanlines_spacing = 1.0
+shader_parameter/noise_strength = 0.4
+
+[sub_resource type="QuadMesh" id="QuadMesh_cdfst"]
+
+[node name="RootControl" type="Node"]
+
+[node name="GamePlaceholder" type="Node2D" parent="."]
 
 [node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = -1
 offset_right = 1920.0
 offset_bottom = 1080.0
 theme = SubResource("Theme_tdex8")
@@ -67,6 +81,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_4awgr")
 script = ExtResource("1_4awgr")
+AsteroidsScene = ExtResource("1_jd16n")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MenuPanel"]
 layout_mode = 2
@@ -257,3 +272,11 @@ size_flags_vertical = 0
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
 theme_override_font_sizes/font_size = 20
+
+[node name="Screen" type="MeshInstance2D" parent="."]
+top_level = true
+texture_repeat = 3
+material = SubResource("ShaderMaterial_rbivr")
+scale = Vector2(1020, 1020)
+mesh = SubResource("QuadMesh_cdfst")
+script = ExtResource("8_hqngs")

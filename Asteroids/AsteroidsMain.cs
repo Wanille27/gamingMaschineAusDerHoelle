@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Asteroids;
 
-public partial class Main : Node2D {
+public partial class AsteroidsMain : Node2D {
 	private bool _running = true;
 	private Thread _runner;
 
@@ -79,7 +79,7 @@ public partial class Main : Node2D {
 		(this._runner = new(this.Run)).Start();
 	}
 
-	~Main() {
+	~AsteroidsMain() {
 		// End Runner thread on Game end
 		// TODO
 		//new CancellationToken()
@@ -87,14 +87,14 @@ public partial class Main : Node2D {
 		foreach (Node child in this.GetChildren()) child.QueueFree();
 	}
 	
-
-	public override void _Notification(int what) {
-		//Console.Out.WriteLine($"what: {what}");
-		switch ((long) what) {
-			case NotificationWMCloseRequest: this._running = false; goto default;
-			default: base._Notification(what); break;
-		}
-	}
+// TODO ?brauche ich das noch?
+//	public override void _Notification(int what) {
+//		//Console.Out.WriteLine($"what: {what}");
+//		switch ((long) what) {
+//			case NotificationWMCloseRequest: this._running = false; goto default;
+//			default: base._Notification(what); break;
+//		}
+//	}
 
 	private async void Run() {
 		try {
