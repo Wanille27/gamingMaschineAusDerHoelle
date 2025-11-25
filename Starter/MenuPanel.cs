@@ -56,11 +56,12 @@ public partial class MenuPanel : PanelContainer
 			this.Show();
 			var curNode = this._gamePlaceholder;
 			this._gamePlaceholder.Hide();
-			this._gamePlaceholder.Free();
 			Console.Out.WriteLine("....");
 			//this._gamePlaceholder.CallDeferred(nameof(this._gamePlaceholder.ReplaceBy), new Node2D());
-			this._gamePlaceholder.ReplaceBy(new Node2D());
+			//this._gamePlaceholder.ReplaceBy(new Node2D());
+			this.RemoveChild(this._gamePlaceholder);
 			Console.Out.WriteLine("....");
+			this._gamePlaceholder.Free();
 		};
 		this.UpdateSelection();
 	}
@@ -110,10 +111,11 @@ public partial class MenuPanel : PanelContainer
 	private void StartGame() {
 		switch (this._controls[this.Selected].GameType) {
 			case GameControl.GameTypeE.Asteroids:
-				Console.Out.WriteLine($"{this._gamePlaceholder}, {this.AsteroidsScene}");
-				var game = (MainAsteroids) this.AsteroidsScene.Instantiate();
-				game.MenuPanelI = this;
-				this._gamePlaceholder.ReplaceBy(game); 
+				this.GetTree().ChangeSceneToPacked(this.AsteroidsScene);
+				//Console.Out.WriteLine($"{this._gamePlaceholder}, {this.AsteroidsScene}");
+			//	var game = (MainAsteroids) this.AsteroidsScene.Instantiate();
+			//	game.MenuPanelI = this;
+			//	this._gamePlaceholder.ReplaceBy(game); 
 				break;
 			default: break;
 		}
