@@ -13,6 +13,9 @@
 [sub_resource type="Theme" id="Theme_5thxb"]
 default_font = ExtResource("4_toda5")
 
+[sub_resource type="Theme" id="Theme_5vvyt"]
+default_font = ExtResource("4_20pc6")
+
 [sub_resource type="LabelSettings" id="LabelSettings_uu6xs"]
 font_size = 36
 

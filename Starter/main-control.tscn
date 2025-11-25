@@ -1,0 +1,282 @@
+[gd_scene load_steps=22 format=3 uid="uid://dqksr1c02weh5"]
+
+[ext_resource type="FontFile" uid="uid://b3ptw5hc6t6iv" path="res://PressStart2P-Regular.ttf" id="1_3vsgj"]
+[ext_resource type="Script" uid="uid://ci3tbd1ygy81v" path="res://MenuPanel.cs" id="1_4awgr"]
+[ext_resource type="PackedScene" uid="uid://bw7jxombfbkmg" path="res://gamingMaschineAusDerHoelle/Asteroids/Main.tscn" id="1_jd16n"]
+[ext_resource type="Script" uid="uid://bnkhf1bt0fjbk" path="res://GameControl.cs" id="2_jt8kg"]
+[ext_resource type="Script" uid="uid://c1vwxmdck6ejg" path="res://SelectionLabel.cs" id="3_jt8kg"]
+[ext_resource type="Script" uid="uid://c4cnti3wgh32u" path="res://ButtonContainer.cs" id="4_6je8t"]
+[ext_resource type="Shader" uid="uid://cyo6fgfwrgjbw" path="res://gamingMaschineAusDerHoelle/Asteroids/Screen.gdshader" id="7_sqqfm"]
+[ext_resource type="Script" uid="uid://ciyilea7v7bq0" path="res://gamingMaschineAusDerHoelle/Asteroids/Screen.cs" id="8_hqngs"]
+
+[sub_resource type="Theme" id="Theme_tdex8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tdex8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Theme" id="Theme_4awgr"]
+default_font = ExtResource("1_3vsgj")
+default_font_size = 40
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_tdex8")
+VBoxContainer/constants/separation = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_tdex8"]
+font_size = 64
+font_color = Color(1, 0.815686, 0, 1)
+
+[sub_resource type="Theme" id="Theme_3vsgj"]
+
+[sub_resource type="Theme" id="Theme_6je8t"]
+default_font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_4awgr"]
+font_size = 40
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4awgr"]
+
+[sub_resource type="Theme" id="Theme_3r3y3"]
+default_font_size = 48
+Button/styles/normal = SubResource("StyleBoxEmpty_4awgr")
+HBoxContainer/constants/separation = 20
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_tdex8"]
+
+[sub_resource type="Shortcut" id="Shortcut_4awgr"]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbivr"]
+shader = ExtResource("7_sqqfm")
+shader_parameter/curvature = 0.0
+shader_parameter/skip = 0.0
+shader_parameter/image_flicker = 0.0
+shader_parameter/vignette_flicker_speed = 0.75
+shader_parameter/vignette_strength = 0.5
+shader_parameter/small_scanlines_speed = 0.8
+shader_parameter/small_scanlines_proximity = 1.0
+shader_parameter/small_scanlines_opacity = 1.0
+shader_parameter/scanlines_opacity = 0.0
+shader_parameter/scanlines_speed = 1.0
+shader_parameter/scanline_thickness = 0.5
+shader_parameter/scanlines_spacing = 1.0
+shader_parameter/noise_strength = 0.4
+
+[sub_resource type="QuadMesh" id="QuadMesh_cdfst"]
+
+[node name="RootControl" type="Node"]
+
+[node name="GamePlaceholder" type="Node2D" parent="."]
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+theme = SubResource("Theme_tdex8")
+
+[node name="MenuPanel" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_4awgr")
+script = ExtResource("1_4awgr")
+AsteroidsScene = ExtResource("1_jd16n")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MenuPanel"]
+layout_mode = 2
+focus_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MenuPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="MenuTitle" type="Label" parent="Panel/MenuPanel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "BITBOX"
+label_settings = SubResource("LabelSettings_tdex8")
+horizontal_alignment = 1
+
+[node name="ScoreboardContainer" type="VBoxContainer" parent="Panel/MenuPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="UserScoreRow" type="CenterContainer" parent="Panel/MenuPanel/VBoxContainer/ScoreboardContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MenuPanel/VBoxContainer/ScoreboardContainer/UserScoreRow"]
+layout_mode = 2
+
+[node name="UserNameLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/ScoreboardContainer/UserScoreRow/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.258824, 0.94902, 1)
+text = "SilbenerElefant"
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MenuPanel/VBoxContainer/ScoreboardContainer/UserScoreRow/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="ScoreLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/ScoreboardContainer/UserScoreRow/HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+text = "132899498549590"
+horizontal_alignment = 2
+
+[node name="GameSelectionContainer" type="HBoxContainer" parent="Panel/MenuPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_3vsgj")
+alignment = 1
+
+[node name="BitKnightGameControl" type="PanelContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer"]
+layout_mode = 2
+theme = SubResource("Theme_6je8t")
+script = ExtResource("2_jt8kg")
+GameType = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/BitKnightGameControl"]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 6
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/BitKnightGameControl/MarginContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+script = ExtResource("4_6je8t")
+
+[node name="SelectionLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/BitKnightGameControl/MarginContainer/ButtonContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = ">"
+label_settings = SubResource("LabelSettings_4awgr")
+script = ExtResource("3_jt8kg")
+
+[node name="Button" type="Button" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/BitKnightGameControl/MarginContainer/ButtonContainer" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+shortcut_context = NodePath("..")
+theme = SubResource("Theme_3r3y3")
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 40
+toggle_mode = true
+action_mode = 0
+keep_pressed_outside = true
+button_group = SubResource("ButtonGroup_tdex8")
+shortcut = SubResource("Shortcut_4awgr")
+text = "BITKNIGHT"
+alignment = 0
+
+[node name="PongGameControl" type="PanelContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer"]
+layout_mode = 2
+script = ExtResource("2_jt8kg")
+GameType = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/PongGameControl"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 6
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/PongGameControl/MarginContainer"]
+layout_mode = 2
+
+[node name="SelectionLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/PongGameControl/MarginContainer/ButtonContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = ">"
+label_settings = SubResource("LabelSettings_4awgr")
+script = ExtResource("3_jt8kg")
+
+[node name="Button" type="Button" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/PongGameControl/MarginContainer/ButtonContainer" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+shortcut_context = NodePath("..")
+theme = SubResource("Theme_3r3y3")
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 40
+toggle_mode = true
+action_mode = 0
+keep_pressed_outside = true
+button_group = SubResource("ButtonGroup_tdex8")
+shortcut = SubResource("Shortcut_4awgr")
+text = "PONG"
+alignment = 0
+
+[node name="AsteroidsGameControl" type="PanelContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer"]
+layout_mode = 2
+script = ExtResource("2_jt8kg")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/AsteroidsGameControl"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 6
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/AsteroidsGameControl/MarginContainer"]
+layout_mode = 2
+
+[node name="SelectionLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/AsteroidsGameControl/MarginContainer/ButtonContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = ">"
+label_settings = SubResource("LabelSettings_4awgr")
+script = ExtResource("3_jt8kg")
+
+[node name="Button" type="Button" parent="Panel/MenuPanel/VBoxContainer/GameSelectionContainer/AsteroidsGameControl/MarginContainer/ButtonContainer" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+shortcut_context = NodePath("..")
+theme = SubResource("Theme_3r3y3")
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 40
+toggle_mode = true
+action_mode = 0
+keep_pressed_outside = true
+button_group = SubResource("ButtonGroup_tdex8")
+shortcut = SubResource("Shortcut_4awgr")
+text = "ASTEROIDS"
+alignment = 0
+
+[node name="GameDescriptionMarginContainer" type="MarginContainer" parent="Panel/MenuPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="GameDescriptionHBoxContainer" type="HBoxContainer" parent="Panel/MenuPanel/VBoxContainer/GameDescriptionMarginContainer"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/MenuPanel/VBoxContainer/GameDescriptionMarginContainer/GameDescriptionHBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="MissionLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/GameDescriptionMarginContainer/GameDescriptionHBoxContainer/CenterContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="SeperatorControl" type="Control" parent="Panel/MenuPanel/VBoxContainer/GameDescriptionMarginContainer/GameDescriptionHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterContainer2" type="CenterContainer" parent="Panel/MenuPanel/VBoxContainer/GameDescriptionMarginContainer/GameDescriptionHBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="ExplanationLabel" type="Label" parent="Panel/MenuPanel/VBoxContainer/GameDescriptionMarginContainer/GameDescriptionHBoxContainer/CenterContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="Screen" type="MeshInstance2D" parent="."]
+top_level = true
+texture_repeat = 3
+material = SubResource("ShaderMaterial_rbivr")
+scale = Vector2(1020, 1020)
+mesh = SubResource("QuadMesh_cdfst")
+script = ExtResource("8_hqngs")
