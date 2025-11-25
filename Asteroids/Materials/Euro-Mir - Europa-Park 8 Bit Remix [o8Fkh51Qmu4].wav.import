@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://b4xufc6cim7c5"
-path="res://.godot/imported/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav-259617dee8ab7849af937bba17e27188.sample"
+path="res://.godot/imported/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav-ef5565188dc84d757cce9e02c96a4e00.sample"
 
 [deps]
 
-source_file="res://Materials/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav"
-dest_files=["res://.godot/imported/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav-259617dee8ab7849af937bba17e27188.sample"]
+source_file="res://gamingMaschineAusDerHoelle/Asteroids/Materials/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav"
+dest_files=["res://.godot/imported/Euro-Mir - Europa-Park 8 Bit Remix [o8Fkh51Qmu4].wav-ef5565188dc84d757cce9e02c96a4e00.sample"]
 
 [params]
 

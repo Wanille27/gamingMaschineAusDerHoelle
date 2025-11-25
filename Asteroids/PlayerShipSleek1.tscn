@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dgcyap0jkxmrb"]
 
-[ext_resource type="Script" uid="uid://c641rw7ctucxp" path="res://PlayerShip.cs" id="1_4cgdy"]
-[ext_resource type="AudioStream" uid="uid://bykdxv1pgv642" path="res://Materials/BoostedHitEffect.wav" id="2_1vqob"]
-[ext_resource type="Script" uid="uid://bt2hme41wrfti" path="res://RocketEngineStreamPlayer2d.cs" id="2_vfp1s"]
+[ext_resource type="Script" uid="uid://c641rw7ctucxp" path="res://gamingMaschineAusDerHoelle/Asteroids/PlayerShip.cs" id="1_4cgdy"]
+[ext_resource type="AudioStream" uid="uid://bykdxv1pgv642" path="res://gamingMaschineAusDerHoelle/Asteroids/Materials/BoostedHitEffect.wav" id="2_1vqob"]
+[ext_resource type="Script" uid="uid://bt2hme41wrfti" path="res://gamingMaschineAusDerHoelle/Asteroids/RocketEngineStreamPlayer2d.cs" id="2_vfp1s"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4cgdy"]
 
@@ -68,3 +68,7 @@ script = ExtResource("2_vfp1s")
 [node name="AsteroidCollisionAudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Ship"]
 stream = ExtResource("2_1vqob")
 volume_db = -5.0
+
+[node name="InvTimer" type="Timer" parent="Ship"]
+process_callback = 0
+one_shot = true

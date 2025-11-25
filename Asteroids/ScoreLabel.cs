@@ -15,7 +15,7 @@ public partial class ScoreLabel : Label
 		this._updateTextTask = Task.Run(() => {
 			while (this._running) {
 				Task.Delay(100).Wait();
-				this.CallDeferred(Label.MethodName.SetText, AsteroidsMain.Score.ToString());
+				this.CallDeferred(Label.MethodName.SetText, Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids.Score.ToString());
 			}
 
 			return Task.CompletedTask;

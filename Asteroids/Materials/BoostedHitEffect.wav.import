@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bykdxv1pgv642"
-path="res://.godot/imported/BoostedHitEffect.wav-4a8f0708a4d5df3e24f8997ec43d50e2.sample"
+path="res://.godot/imported/BoostedHitEffect.wav-0baf7978ee4fcc3d2737d755ab40456e.sample"
 
 [deps]
 
-source_file="res://Materials/BoostedHitEffect.wav"
-dest_files=["res://.godot/imported/BoostedHitEffect.wav-4a8f0708a4d5df3e24f8997ec43d50e2.sample"]
+source_file="res://gamingMaschineAusDerHoelle/Asteroids/Materials/BoostedHitEffect.wav"
+dest_files=["res://.godot/imported/BoostedHitEffect.wav-0baf7978ee4fcc3d2737d755ab40456e.sample"]
 
 [params]
 

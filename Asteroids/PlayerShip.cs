@@ -18,13 +18,13 @@ public partial class PlayerShip : RigidBody2D {
 	private Line2D[] _selfBackwardFireLineShapes = new Line2D[2];
 	private Line2D[] _selfSidewardsFireLineShapes = new Line2D[2];
 	private CollisionPolygon2D _selfCollisionBody;
-	private readonly PlayerProjectile _baseProjectile;
+	private PlayerProjectile _baseProjectile;
 	private AudioStreamPlayer2D _hitSoundEffectPlayer;
 	private RocketEngineStreamPlayer2d _engineSoundEffectPlayer;
 
 	private float _currentBurstDelay = 0;
 	private bool _shouldShoot;
-	private bool _alive = true;
+	private bool _alive;
 	private byte _health;
 
 	[Export] public byte MaxHealth = 3;
@@ -33,6 +33,8 @@ public partial class PlayerShip : RigidBody2D {
 	[Export] public float FireBurstCount;
 	[Export] private Color _shipColor = new(0.349F, 0.513F, 0.94F);
 	[Export] private Color _shipEngineFireColor = new(0.349F, 0.513F, 0.94F, 0.75F);
+
+	private Timer _invTimer;
 
 	private struct SteerDirection(
 		SteerDirection.LinearDirection linearDirection,
@@ -49,7 +51,15 @@ public partial class PlayerShip : RigidBody2D {
 	public PlayerShip() {
 		this.SetPosition(Vector2.Zero);
 		
-		var projectileScene = GD.Load<PackedScene>("res://Player_Projectile_1.tscn");
+	}
+	
+	public override void _Ready() {
+		base._Ready();
+		
+		this._invTimer = (Timer) this.FindChild("InvTimer");
+		this._invTimer.Start(4);
+		
+		var projectileScene = GD.Load<PackedScene>("res://gamingMaschineAusDerHoelle/Asteroids/Player_Projectile_1.tscn");
 		var projectileSceneI  = projectileScene.Instantiate<Node2D>();
 		this._baseProjectile = (PlayerProjectile) projectileSceneI.GetChild(0).Duplicate();
 		
@@ -57,10 +67,6 @@ public partial class PlayerShip : RigidBody2D {
 		this._baseProjectile._Ready();
 		//this.baseProjectile.SetVisible(false);
 		this._health = this.MaxHealth;
-	}
-	
-	public override void _Ready() {
-		base._Ready();
 
 		Console.Out.WriteLine($":: {Input.GetConnectedJoypads()}");
 		Console.Out.WriteLine("Initializing PlayerShip");
@@ -119,6 +125,12 @@ public partial class PlayerShip : RigidBody2D {
 		//this.Connect(RigidBody2D.SignalName.BodyEntered, new(this, MethodName.OnAreaEntered));
 		this._steerDirection.angularDirection = SteerDirection.AngularDirection.NONE;
 		this._steerDirection.linearDirection = SteerDirection.LinearDirection.NONE;
+		
+		this.SetDeferred("alive", true);
+		this.SetDeferred("health", this.MaxHealth);
+		this._alive = true;
+		this._health = this.MaxHealth;
+		this._invTimer.Start(4);
 	}
 	
 	private new void SetScale(Vector2 scale) {
@@ -132,6 +144,10 @@ public partial class PlayerShip : RigidBody2D {
 			this.SelfLineShape.Points[i] *= 0;
 		}
 		//this.SelfLineShape.SetScale(scale);
+	}
+
+	public override void _Process(double delta) {
+		base._Process(delta);
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -204,7 +220,7 @@ public partial class PlayerShip : RigidBody2D {
 		}
 		this._currentBurstDelay -= (float) delta;
 		
-		AsteroidsMain.ScreenWrap(this);
+		Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids.ScreenWrap(this);
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -299,7 +315,7 @@ public partial class PlayerShip : RigidBody2D {
 	}
 
 	private void OnAreaEntered(Node node) {
-		if (!IsInstanceValid(this)) return;
+		if (this.IsInvunerable() || !IsInstanceValid(this)) return;
 		if (node is not RigidBody2D body) return;
 		
 		this.ApplyCentralImpulse((this.Position - body.Position).Normalized() * 50F);
@@ -310,10 +326,14 @@ public partial class PlayerShip : RigidBody2D {
 		if (this._health != 0) return;
 		this.ResetVfx();
 		this._alive = false;
-		var main = (AsteroidsMain) this.GetParent().GetParent();
+		var main = (Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids) this.GetParent().GetParent();
 		this._steerDirection.angularDirection = SteerDirection.AngularDirection.NONE;
 		this._steerDirection.linearDirection = SteerDirection.LinearDirection.NONE;
-		main.EmitSignal(AsteroidsMain.SignalName.GameOver);
+		main.EmitSignal(Starter.gamingMaschineAusDerHoelle.Asteroids.MainAsteroids.SignalName.GameOver);
+	}
+
+	private bool IsInvunerable() {
+		return !(this._invTimer.IsStopped() || this._invTimer.IsPaused()) && this._invTimer.TimeLeft >= 0;
 	}
 
 	public void PlayEngineVfx() {
@@ -343,6 +363,10 @@ public partial class PlayerShip : RigidBody2D {
 
 	public override void _ExitTree() {
 		base._ExitTree();
+	}
+
+	protected override void Dispose(bool disposing) {
+		base.Dispose(disposing);
 		this._baseProjectile.QueueFree();
 	}
 }
