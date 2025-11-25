@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://c805m2m2khql3"]
+
+[ext_resource type="Script" uid="uid://bpjmq6j8imcck" path="res://scripts/main_menu.gd" id="1_menu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_l6cm7"]
+font_size = 48
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+script = ExtResource("1_menu")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.13816993, 0.13816993, 0.13816993, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -25.5
+offset_right = 4.0
+offset_bottom = 25.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "PONG"
+label_settings = SubResource("LabelSettings_l6cm7")
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "Single Player"
+
+[node name="MultiPlayer" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "Multi Player"
+
+[connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="_on_single_player_pressed"]
+[connection signal="pressed" from="VBoxContainer/MultiPlayer" to="." method="_on_multi_player_pressed"]

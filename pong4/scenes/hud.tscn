@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://dl47486gxy70h"]
+
+[ext_resource type="Script" uid="uid://dqygxm8oruobw" path="res://scenes/hud.gd" id="1_ahhtf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_toqtt"]
+font_size = 100
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ahhtf")
+
+[node name="LeftScore" type="Label" parent="."]
+layout_mode = 0
+offset_left = 150.0
+offset_right = 450.0
+offset_bottom = 150.0
+text = "0"
+label_settings = SubResource("LabelSettings_toqtt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightScore" type="Label" parent="."]
+layout_mode = 0
+offset_left = 770.0
+offset_right = 1070.0
+offset_bottom = 150.0
+text = "0"
+label_settings = SubResource("LabelSettings_toqtt")
+horizontal_alignment = 1
+vertical_alignment = 1
